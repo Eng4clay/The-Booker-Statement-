@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الأطروحة البوكرية في الثالوث الرياضي 𝕊</title>
+    <title>الأطروحة البوكرية | نظام 𝕊 الثالوث الرياضي</title>
     <!-- الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Amiri:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Font Awesome للأيقونات -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Mermaid للرسوم البيانية -->
+    <!-- Mermaid -->
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
     <!-- MathJax -->
     <script>
@@ -19,22 +17,17 @@
                 inlineMath: [['$', '$'], ['\\(', '\\)']],
                 displayMath: [['$$', '$$'], ['\\[', '\\]']],
                 processEscapes: true,
-                packages: {'[+]': ['ams', 'noerrors']}
+                packages: {'[+]': ['ams', 'noerrors', 'bbox']}
             },
             options: {
                 ignoreHtmlClass: 'tex2jax_ignore',
-                processHtmlClass: 'tex2jax_process'
+                processHtmlClass: 'tex2jax_process',
+                renderActions: { addMenu: [0, '', ''] }
             },
             loader: {load: ['[tex]/ams', '[tex]/noerrors']}
         };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
-    <!-- Marked لتحويل Markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- Highlight.js لتلوين الكود -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script"></script>
     <style>
         * {
             margin: 0;
@@ -42,229 +35,125 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Cairo', 'Amiri', sans-serif;
+            font-family: 'Cairo', 'Amiri', 'Roboto Mono', sans-serif;
             background-color: #fcf8f2;
             color: #1e1e2a;
             line-height: 1.8;
             font-size: 18px;
-            height: 100vh;
-            overflow: hidden;
+            display: flex;
             direction: rtl;
         }
-        #container {
-            display: flex;
-            height: 100%;
-        }
-        /* الشريط الجانبي */
-        #sidebar {
-            width: 380px;
-            background-color: #1e2b3a;
-            color: white;
+        /* الشريط الجانبي للتنقل */
+        .sidebar {
+            width: 320px;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
             overflow-y: auto;
-            padding: 1.5rem 1rem;
-            border-left: 3px solid #9C27B0;
-            transition: width 0.3s;
-        }
-        #sidebar.collapsed {
-            width: 60px;
-            padding: 1.5rem 0.5rem;
-        }
-        #sidebar.collapsed .section-title span,
-        #sidebar.collapsed .file-link span {
-            display: none;
-        }
-        #sidebar.collapsed .section-title i {
-            margin-left: 0;
-        }
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #9C27B0;
-        }
-        .sidebar-header h2 {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: #fff;
-            border: none;
-            margin: 0;
-        }
-        #toggleSidebar {
-            background: #9C27B0;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            border-radius: 8px;
-            padding: 0.3rem 0.8rem;
-            transition: background 0.2s;
-        }
-        #toggleSidebar:hover {
-            background: #7B1FA2;
-        }
-        .section {
-            margin-bottom: 1.5rem;
-        }
-        .section-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #555;
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .section-title i {
-            font-size: 1.2rem;
-            width: 24px;
-            color: #9C27B0;
-        }
-        .subsection {
-            margin-right: 1.5rem;
-            margin-bottom: 0.8rem;
-        }
-        .subsection-title {
-            font-weight: 600;
-            color: #ccc;
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .subsection-title i {
+            box-shadow: 4px 0 12px rgba(0,0,0,0.1);
             font-size: 0.9rem;
-            width: 20px;
-            color: #aaa;
+            border-left: 4px solid #9C27B0;
         }
-        .file-list {
-            list-style: none;
-            margin-right: 1.8rem;
-        }
-        .file-list li {
-            margin-bottom: 0.2rem;
-        }
-        .file-link {
-            color: #ddd;
-            text-decoration: none;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            transition: background 0.2s, color 0.2s;
-        }
-        .file-link i {
-            font-size: 0.8rem;
-            width: 18px;
+        .sidebar h2 {
             color: #9C27B0;
+            border-bottom: 2px solid #9C27B0;
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+            font-size: 1.5rem;
         }
-        .file-link:hover {
-            background: #9C27B0;
+        .sidebar ul {
+            list-style: none;
+            padding-right: 0;
+        }
+        .sidebar li {
+            margin-bottom: 0.3rem;
+        }
+        .sidebar a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            padding: 0.3rem 0.5rem;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .sidebar a:hover {
+            background-color: #9C27B0;
             color: white;
         }
-        .file-link.active {
-            background: #7B1FA2;
-            color: white;
-            font-weight: 700;
+        .sidebar .part {
+            margin-top: 1.2rem;
+            font-weight: bold;
+            color: #f1c40f;
         }
+        .sidebar .part a {
+            color: #f1c40f;
+        }
+        .sidebar .part a:hover {
+            background-color: #f1c40f;
+            color: #2c3e50;
+        }
+        .sidebar .sub {
+            margin-right: 1rem;
+            font-size: 0.85rem;
+        }
+
         /* المحتوى الرئيسي */
-        #main {
+        .main-content {
             flex: 1;
-            background: #fcf8f2;
-            overflow-y: auto;
             padding: 2rem 3rem;
-            position: relative;
-        }
-        #content {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
-        .markdown-body {
-            /* أنماط المحتوى المحول */
-            background: white;
-            padding: 2.5rem;
-            border-radius: 24px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+
+        /* الطباعة */
+        @media print {
+            .sidebar { display: none; }
+            .main-content { padding: 0.5in; }
+            body { display: block; }
+            .print-button { display: none; }
         }
-        .markdown-body h1,
-        .markdown-body h2,
-        .markdown-body h3 {
+
+        /* التنسيقات الباقية (نفس السابق) */
+        h1, h2, h3, h4 {
+            font-weight: 900;
             color: #1e2b3a;
+            margin-top: 2.2rem;
+            margin-bottom: 1.2rem;
             border-bottom: 2px solid #9C27B0;
             padding-bottom: 0.4rem;
-            margin-top: 2rem;
         }
-        .markdown-body h1 { font-size: 2.2rem; }
-        .markdown-body h2 { font-size: 1.8rem; }
-        .markdown-body h3 { font-size: 1.5rem; }
-        .markdown-body p { margin-bottom: 1.2rem; text-align: justify; }
-        .markdown-body table {
+        h1 { font-size: 2.7rem; border-bottom-width: 4px; color: #6a1b9a; }
+        h2 { font-size: 2.2rem; }
+        h3 { font-size: 1.8rem; border-bottom: 1px dashed #9C27B0; }
+        p { margin-bottom: 1.2rem; text-align: justify; }
+        table {
             width: 100%;
             border-collapse: collapse;
             margin: 2rem 0;
+            font-size: 0.95rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border-radius: 16px;
             overflow: hidden;
+            background: white;
+            direction: ltr;
         }
-        .markdown-body th {
+        th {
             background: #9C27B0;
             color: white;
             font-weight: 700;
             padding: 12px 8px;
+            text-align: center;
         }
-        .markdown-body td {
+        td {
             border: 1px solid #ddd;
             padding: 10px 8px;
-        }
-        .markdown-body tr:nth-child(even) { background-color: #f9f4ff; }
-        .markdown-body pre {
-            background: #1e1e2a;
-            border-radius: 12px;
-            padding: 1rem;
-            overflow-x: auto;
-        }
-        .markdown-body code {
-            font-family: 'Roboto Mono', monospace;
-            background: #eee;
-            padding: 0.2rem 0.4rem;
-            border-radius: 6px;
-        }
-        .markdown-body pre code {
-            background: transparent;
-            color: #f8f8f2;
-        }
-        .markdown-body .math, .markdown-body .MathJax {
-            direction: ltr;
-            unicode-bidi: embed;
             text-align: center;
-            margin: 1.5rem 0;
-            overflow-x: auto;
         }
-        .markdown-body .boxed-equation {
-            background: #f3e5f5;
-            padding: 1.2rem 1.8rem;
-            border-radius: 40px 12px 40px 12px;
-            border-right: 8px solid #9C27B0;
-            margin: 2rem 0;
-            text-align: center;
-            direction: ltr;
-        }
-        .markdown-body .note-box,
-        .markdown-body .example {
-            padding: 1.4rem;
-            border-radius: 20px;
-            margin: 2rem 0;
-            border-right: 6px solid;
-        }
-        .markdown-body .note-box { background: #fff7e0; border-color: #FFB74D; }
-        .markdown-body .example { background: #e0f2f1; border-color: #4ECDC4; }
-        .markdown-body .mermaid {
+        tr:nth-child(even) { background-color: #f9f4ff; }
+        .mermaid {
             background: white;
             padding: 20px;
             border-radius: 24px;
@@ -272,20 +161,62 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.05);
             text-align: center;
             direction: ltr;
+            overflow-x: auto;
         }
-        .loader {
+        .math, .MathJax, .equation {
+            direction: ltr;
+            unicode-bidi: embed;
             text-align: center;
-            padding: 3rem;
-            color: #666;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            background: #f3f0f9;
+            padding: 0.8rem;
+            border-radius: 16px;
+            font-size: 1.2rem;
         }
-        .error-message {
-            background: #ffebee;
-            border-right: 6px solid #f44336;
-            padding: 1rem;
-            border-radius: 12px;
-            color: #b71c1c;
+        .boxed-equation {
+            background: #f3e5f5;
+            padding: 1.2rem 1.8rem;
+            border-radius: 40px 12px 40px 12px;
+            border-right: 8px solid #9C27B0;
+            font-size: 1.3rem;
+            margin: 2rem 0;
+            text-align: center;
+            direction: ltr;
+            box-shadow: 0 2px 8px rgba(156,39,176,0.2);
         }
-        /* زر الطباعة */
+        .page-break {
+            page-break-after: always;
+            break-after: page;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #9C27B0, transparent);
+            margin: 3rem 0;
+        }
+        .footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: #1e2b3a;
+            color: white;
+            border-radius: 60px 12px 60px 12px;
+            text-align: center;
+            font-size: 1.1rem;
+            border-bottom: 6px solid #9C27B0;
+        }
+        .footer a { color: #ffb74d; text-decoration: none; }
+        .note-box {
+            background: #fff7e0;
+            border-right: 6px solid #FFB74D;
+            padding: 1.4rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+        .example {
+            background: #e0f2f1;
+            border-right: 6px solid #4ECDC4;
+            padding: 1.4rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
         .print-button {
             position: fixed;
             bottom: 30px;
@@ -294,326 +225,354 @@
             color: white;
             border: none;
             border-radius: 60px;
-            padding: 12px 24px;
-            font-size: 1rem;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(156,39,176,0.4);
-            z-index: 100;
-            transition: transform 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            z-index: 1000;
+            transition: 0.2s;
+            border: 2px solid white;
         }
         .print-button:hover {
-            transform: scale(1.05);
             background: #7B1FA2;
+            transform: scale(1.05);
         }
-        /* أنماط للطباعة */
-        @media print {
-            #sidebar, .print-button { display: none; }
-            #main { padding: 0; }
-            .markdown-body { box-shadow: none; }
+        /* رأس القسم */
+        .section-header {
+            background: #f0e7fe;
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px 10px 40px 10px;
+            margin: 2.5rem 0 1.5rem;
+            border-right: 8px solid #9C27B0;
+        }
+        .section-header h2 {
+            margin: 0;
+            border: none;
+        }
+        .toc-marker {
+            scroll-margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div id="container">
-        <!-- الشريط الجانبي -->
-        <aside id="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fas fa-cube"></i> <span>البيان البوكري</span></h2>
-                <button id="toggleSidebar" title="طي/توسيع"><i class="fas fa-chevron-right"></i></button>
+    <!-- الشريط الجانبي - هيكل الأطروحة الكامل -->
+    <div class="sidebar">
+        <h2>📚 فهرس الأطروحة</h2>
+        <ul>
+            <li class="part"><a href="#intro_book">📘 00_مقدمة_الكتاب_والدليل</a></li>
+            <li class="part"><a href="#exec_summary">📄 00_ملخص_تنفيذي</a></li>
+            
+            <li class="part">📁 الجزء الأول: الأساسيات النظرية</li>
+            <li><a href="#part1_01">📁 01_المدخل_والخلفية</a></li>
+            <li class="sub"><a href="#1_1">01_01_مقدمة_الثالوث_الرياضي</a></li>
+            <li class="sub"><a href="#1_2">01_02_الإطار_النظري_والتأصيل</a></li>
+            <li class="sub"><a href="#1_3">01_03_الخلفية_البحثية</a></li>
+            
+            <li><a href="#part1_02">📁 02_النواة_التفسيرية</a></li>
+            <li class="sub"><a href="#2_1">02_01_التفسير_البنيوي_للثالوث</a></li>
+            <li class="sub"><a href="#2_2">02_02_آلية_التجلي_والتحول</a></li>
+            <li class="sub"><a href="#2_3">02_03_العلاقات_الداخلية_في_النظام_الثلاثي</a></li>
+            
+            <li><a href="#part1_03">📁 03_الدليل_المرئي_والرموز</a></li>
+            <li class="sub"><a href="#3_1">03_01_معجم_رموز_الثالوث</a></li>
+            <li class="sub"><a href="#3_2">03_02_فهرس_الرسومات_والمخططات</a></li>
+            <li class="sub"><a href="#figures">📁 الرسومات_مفردة</a></li>
+            
+            <li class="part">📁 الجزء الثاني: التطبيقات المتعددة</li>
+            <li><a href="#part2_04">📁 04_التطبيقات_الرياضية_المتقدمة</a></li>
+            <li class="sub"><a href="#4_1">04_01_نظرية_الأعداد_في_𝕊</a></li>
+            <li class="sub"><a href="#4_2">04_02_الهندسة_اللاإقليدية_و_𝕊</a></li>
+            <li class="sub"><a href="#4_3">04_03_التحليل_الدالي_في_فضاءات_التجلي</a></li>
+            <li class="sub"><a href="#4_4">04_04_الطوبولوجيا_الجبرية_للبنى_العلائقية</a></li>
+            
+            <li><a href="#part2_05">📁 05_التطبيقات_الفيزيائية_والكونية</a></li>
+            <li class="sub"><a href="#5_1">05_01_النموذج_الكوني_الحلزوني_المتطور</a></li>
+            <li class="sub"><a href="#5_2">05_02_إعادة_تفسير_ميكانيكا_الكم_في_إطار_𝕊</a></li>
+            <li class="sub"><a href="#5_3">05_03_الثوابت_الفيزيائية_كقيم_BS</a></li>
+            <li class="sub"><a href="#5_4">05_04_نظرية_الأوتار_و_بنية_∞_المتعددة_الأبعاد</a></li>
+            
+            <li><a href="#part2_06">📁 06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي</a></li>
+            <li class="sub"><a href="#6_1">06_01_خوارزميات_التجلي_لحل_مشاكل_NP</a></li>
+            <li class="sub"><a href="#6_2">06_02_التعلم_الآلي_البنيوي_باستخدام_BS</a></li>
+            <li class="sub"><a href="#6_3">06_03_معالجة_اللغة_الطبيعية_بمنظور_علائقي</a></li>
+            <li class="sub"><a href="#6_4">06_04_محاكاة_الأنظمة_المعقدة_في_𝕊</a></li>
+            
+            <li><a href="#part2_07">📁 07_التطبيقات_المعرفية_والفلسفية</a></li>
+            <li class="sub"><a href="#7_1">07_01_نظرية_المعرفة_البنيوية_في_𝕊</a></li>
+            <li class="sub"><a href="#7_2">07_02_فلسفة_الرياضيات_التجريبية</a></li>
+            <li class="sub"><a href="#7_3">07_03_النظام_𝕊_وأسس_المنطق_الجديد</a></li>
+            <li class="sub"><a href="#7_4">07_04_التجربة_الصوفية_والتجلي_الرياضي</a></li>
+            
+            <li><a href="#part2_08">📁 08_الدراسات_التجريبية_والتطبيقية</a></li>
+            <li class="sub"><a href="#8_1">08_01_دراسات_حالة_في_الاقتصاد_السلوكي</a></li>
+            <li class="sub"><a href="#8_2">08_02_تطبيقات_في_علم_الأعصاب_والإدراك</a></li>
+            <li class="sub"><a href="#8_3">08_03_النظام_𝕊_في_تحليل_الشبكات_الاجتماعية</a></li>
+            <li class="sub"><a href="#8_4">08_04_نمذجة_الأنظمة_البيئية_المعقدة</a></li>
+            
+            <li class="part">📁 الجزء الثالث: المناقشة والمستقبل</li>
+            <li><a href="#part3_09">📁 09_الدراسات_المقارنة_والنقدية</a></li>
+            <li class="sub"><a href="#9_1">09_01_مقارنة_مع_نظرية_المجموعات_ZFC</a></li>
+            <li class="sub"><a href="#9_2">09_02_العلاقة_مع_نظرية_الفئات</a></li>
+            <li class="sub"><a href="#9_3">09_03_النقد_البنائي_للنظام_𝕊</a></li>
+            <li class="sub"><a href="#9_4">09_04_الحوار_مع_الرياضيات_التقليدية</a></li>
+            
+            <li><a href="#part3_10">📁 10_الأدوات_والبنية_التحتية</a></li>
+            <li class="sub"><a href="#10_1">10_01_مكتبة_SMath_للبيثون</a></li>
+            <li class="sub"><a href="#10_2">10_02_حزمة_SSystem_لـ_R</a></li>
+            <li class="sub"><a href="#10_3">10_03_واجهة_بصرية_للمحاكاة_التفاعلية</a></li>
+            <li class="sub"><a href="#10_4">10_04_قاعدة_بيانات_المسائل_والتجليات</a></li>
+            
+            <li><a href="#part3_11">📁 11_الرؤى_المستقبلية</a></li>
+            <li class="sub"><a href="#11_1">11_01_خارطة_البحث_العلمي_لـ_𝕊</a></li>
+            <li class="sub"><a href="#11_2">11_02_التعليم_والتدريس_بمنهج_𝕊</a></li>
+            <li class="sub"><a href="#11_3">11_03_الذكاء_الاصطناعي_العام_و_𝕊</a></li>
+            <li class="sub"><a href="#11_4">11_04_رؤية_لمستقبل_الرياضيات_الموحدة</a></li>
+            
+            <li class="part"><a href="#appendices">📁 الملاحق</a></li>
+            <li class="sub"><a href="#app_a">الملحق_أ_المصطلحات</a></li>
+            <li class="sub"><a href="#app_b">الملحق_ب_المراجع</a></li>
+            <li class="sub"><a href="#app_c">الملحق_ج_الشهادات</a></li>
+            
+            <li class="part"><a href="#support">📁 ملفات_الدعم</a></li>
+            <li class="sub"><a href="#readme">README_الكتاب.md</a></li>
+            <li class="sub"><a href="#quick">دليل_الاستخدام_السريع</a></li>
+            <li class="sub"><a href="#compat">جدول_التوافق_الرياضي</a></li>
+            <li class="sub"><a href="#symbols">فهرس_الرموز_والمصطلحات_المتقدمة</a></li>
+        </ul>
+        <div style="margin-top: 2rem; color: #95a5a6; font-size: 0.8rem;">
+            <p>📌 إرشادات التثبيت:</p>
+            <p>1. احفظ الملف كـ index.html<br>2. افتحه في أي متصفح<br>3. للطباعة: استخدم الزر 🖨️</p>
+            <p>🌐 استضافته على GitHub Pages:<br> ارفع الملف إلى مستودع وفعّل Pages.</p>
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <button class="print-button" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+
+        <!-- ===================== صفحة العنوان ===================== -->
+        <div id="title-page" style="text-align: center; margin: 4rem 0 6rem 0;">
+            <p style="font-size: 32pt; font-weight: 900; color: #9C27B0; line-height: 1.4;">📘 فرضية البيان البوكري<br>نظام 𝕊 الثالوث الرياضي</p>
+            <p style="font-size: 20pt;">تأصيل فلسفي-طبيعي للوجود والتغير واللانهاية</p>
+            <p style="font-size: 24pt; font-weight: 700; color: #6a1b9a;">النسخة المطوّرة - خطة تحويل نقاط الضعف إلى قوة قابلة للاختبار</p>
+            <hr style="width: 180px; margin: 2rem auto; border: 2px solid #9C27B0;">
+            <div style="margin-top: 4rem;">
+                <p style="font-size: 22pt;">✍️ <strong>م. أحمد علي بوكر نسيب</strong></p>
+                <p style="font-size: 20pt; color: #9C27B0;">📅 2026</p>
+                <p style="font-size: 16pt;">📧 Eng.ahmad.2011bokar@gmail.com</p>
+                <p style="font-size: 16pt;">🔗 https://github.com/bouker/thesis-S</p>
             </div>
-            <nav id="nav"></nav>
-        </aside>
-        <!-- المحتوى الرئيسي -->
-        <main id="main">
-            <div id="content">
-                <div class="markdown-body" id="markdown-content">
-                    <h1 style="text-align: center;">📘 الأطروحة البوكرية في الثالوث الرياضي</h1>
-                    <p style="text-align: center; font-size: 1.2rem;">اختر ملفًا من الشريط الجانبي لبدء القراءة.</p>
-                </div>
-            </div>
-            <button class="print-button" onclick="window.print()"><i class="fas fa-print"></i> طباعة / PDF</button>
-        </main>
+        </div>
+        <div class="page-break"></div>
+
+        <!-- 00_مقدمة_الكتاب_والدليل -->
+        <div id="intro_book" class="toc-marker section-header"><h2>📘 00_مقدمة_الكتاب_والدليل</h2></div>
+        <p>هذا الكتاب هو العرض الشامل للأطروحة البوكرية في الثالوث الرياضي. يهدف إلى تقديم نظام 𝕊 كبديل تأسيسي للرياضيات الكلاسيكية، مع دليل تعليمي متكامل للباحثين والطلاب. يتكون من ثلاثة أجزاء رئيسية تغطي الأساسيات النظرية، التطبيقات المتعددة، والمناقشات المستقبلية.</p>
+        <p>تم تصميم هذا الموقع ليعكس الهيكل التنظيمي الكامل للأطروحة، مع روابط سريعة لكل فصل وقسم. يمكنك استخدام القائمة الجانبية للتنقل بين الأجزاء.</p>
+        <div class="page-break"></div>
+
+        <!-- 00_ملخص_تنفيذي -->
+        <div id="exec_summary" class="toc-marker section-header"><h2>📄 00_ملخص_تنفيذي</h2></div>
+        <p>يقدم نظام 𝕊 إطاراً موحداً للوجود والرياضيات والفيزياء عبر ثلاثية (❶، 0ₚ، ∞). يعيد تعريف الأعداد والعمليات والثوابت الفيزيائية، ويقدم مقياس الاستقرار البنيوي (BS) كأداة كمية. يتضمن تنبؤات قابلة للاختبار (تردد CMB ~0.1 هرتز) ويشتق ثابتاً فيزيائياً جديداً \(\mathcal{CB}\).</p>
+        <div class="page-break"></div>
+
+        <!-- =============== الجزء الأول: الأساسيات النظرية =============== -->
+        <div class="section-header"><h1>📁 الجزء الأول: الأساسيات النظرية</h1></div>
+
+        <!-- 01_المدخل_والخلفية -->
+        <div id="part1_01" class="toc-marker section-header"><h2>📁 01_المدخل_والخلفية</h2></div>
+        <div id="1_1" class="toc-marker"><h3>01_01_مقدمة_الثالوث_الرياضي</h3></div>
+        <p>نظام 𝕊 يقوم على ثلاثية تأسيسية: الواحد المطلق (❶)، الإمكان المحض (0ₚ)، واللانهاية العلائقية (∞). هذه العناصر ليست مجرد رموز، بل هي كيانات وجودية تولد الأعداد والعلاقات. المعادلة المركزية: \(❶ \oplus 0ₚ = ① = ∞\).</p>
+        <!-- ندرج هنا المزيد من النص من الصفحة الأصلية، لكن نكتفي بالعناوين والمقتطفات -->
+        <p>... (يتبع المحتوى الكامل من الأطروحة كما هو موثق في النص الأصلي) ...</p>
+        <!-- نضيف المخططات الموجودة -->
+        <div class="mermaid">
+        graph TD
+            A["❶<br>الواحد المطلق"] -->|"ε"| B["0ₚ<br>الإمكان"]
+            B -->|"δ"| C["∞<br>العلاقة"]
+            C -->|"η"| D["①"]
+        </div>
+
+        <div id="1_2" class="toc-marker"><h3>01_02_الإطار_النظري_والتأصيل</h3></div>
+        <p>يستند النظام إلى نقد الأسس الكلاسيكية (ZFC، غودل، كوهين) ويعود إلى الميتافيزيقا الرياضية. يستعرض التطور التاريخي للمفاهيم الثالوثية من فيثاغورس إلى ابن سينا وغودل.</p>
+        <!-- جدول تاريخي -->
+        <table> <tr><th>الفيلسوف</th><th>المساهمة</th></tr> <tr><td>ابن سينا</td><td>0ₚ كإمكان</td></tr> </table>
+
+        <div id="1_3" class="toc-marker"><h3>01_03_الخلفية_البحثية</h3></div>
+        <p>يستعرض هذا القسم الأدبيات السابقة في فلسفة الرياضيات وفيزياء الكم والنسبية، ويبين كيف يسد نظام 𝕊 الفجوات النظرية.</p>
+        <div class="page-break"></div>
+
+        <!-- 02_النواة_التفسيرية -->
+        <div id="part1_02" class="toc-marker section-header"><h2>📁 02_النواة_التفسيرية</h2></div>
+        <div id="2_1" class="toc-marker"><h3>02_01_التفسير_البنيوي_للثالوث</h3></div>
+        <p>يتم تفسير العناصر الثلاثة كمستويات للوجود: المطلق (❶) هو مصدر غير قابل للقياس، الإمكان (0ₚ) هو العدم النشط الذي يحتوي كل الاحتمالات، والعلاقة (∞) هي شبكة التفاعل. كل موجود هو تجلٍّ لهذه الثلاثية.</p>
+        <div id="2_2" class="toc-marker"><h3>02_02_آلية_التجلي_والتحول</h3></div>
+        <p>عملية التجلي \(\eta = \delta \circ \varepsilon\) تنقل من المطلق إلى المتعدد. \(\varepsilon\) هي هبة الوجود، \(\delta\) هي تشكل الإمكان في علاقات. مثال: \(\eta(❶) = ①\).</p>
+        <div id="2_3" class="toc-marker"><h3>02_03_العلاقات_الداخلية_في_النظام_الثلاثي</h3></div>
+        <p>الجبر الثالوثي (⊕, ⊗) يحدد كيف تتفاعل العناصر. التمثيل المصفوفي: \(❶, 0ₚ, ∞\) كمصفوفات \(3\times3\).</p>
+        <div class="math">\(❶ \oplus 0ₚ = ①\)</div>
+        <div class="page-break"></div>
+
+        <!-- 03_الدليل_المرئي_والرموز -->
+        <div id="part1_03" class="toc-marker section-header"><h2>📁 03_الدليل_المرئي_والرموز</h2></div>
+        <div id="3_1" class="toc-marker"><h3>03_01_معجم_رموز_الثالوث</h3></div>
+        <ul>
+            <li>❶ : الواحد المطلق (غير عددي)</li>
+            <li>0ₚ : الإمكان المحض (صفر فلسفي)</li>
+            <li>∞ : اللانهاية العلائقية</li>
+            <li>① : أول تجلٍّ مستقر (العدد 1 الطبيعي)</li>
+            <li>η : عملية التجلي</li>
+            <li>BS : الاستقرار البنيوي</li>
+        </ul>
+        <div id="3_2" class="toc-marker"><h3>03_02_فهرس_الرسومات_والمخططات</h3></div>
+        <p>جميع الرسوم البيانية (Mermaid) موزعة في النص. تتضمن مخططات: البيان البوكري، التراكب الكمومي، التشابك، الوعي الثالوثي، خارطة الطريق، وغيرها.</p>
+        <div id="figures" class="toc-marker"><h4>📁 الرسومات_مفردة</h4></div>
+        <p>يمكن العثور على كل رسم بياني ضمن الأقسام المختصة. على سبيل المثال:</p>
+        <ul>
+            <li><strong>الشكل 1.1:</strong> النظام الكوني (رسم بياني للثالوث).</li>
+            <li><strong>الشكل 1.2:</strong> النموذج الحلزوني (في قسم الكون).</li>
+        </ul>
+        <div class="page-break"></div>
+
+        <!-- =============== الجزء الثاني: التطبيقات المتعددة =============== -->
+        <div class="section-header"><h1>📁 الجزء الثاني: التطبيقات المتعددة</h1></div>
+
+        <!-- 04_التطبيقات_الرياضية_المتقدمة -->
+        <div id="part2_04" class="toc-marker section-header"><h2>📁 04_التطبيقات_الرياضية_المتقدمة</h2></div>
+        <div id="4_1" class="toc-marker"><h3>04_01_نظرية_الأعداد_في_𝕊</h3></div>
+        <p>إعادة تعريف الأعداد الأولية: \(BS(p) = \frac{2}{2p-3}\) لـ \(p\ge5\). العدد ① هو أول الأعداد الأولية. العلاقة مع مبرهنة الأعداد الأولية: \(\sum_{p\le x}BS(p) \sim \frac12 \log\log x\).</p>
+        <div id="4_2" class="toc-marker"><h3>04_02_الهندسة_اللاإقليدية_و_𝕊</h3></div>
+        <p>توسيع الزمكان بإضافة بُعد التجلي \(\tau\): \(ds^2 = g_{\mu\nu}dx^\mu dx^\nu + \beta(\tau)d\tau^2\). هذا يؤدي إلى هندسة جديدة ذات انحناء متغير.</p>
+        <div id="4_3" class="toc-marker"><h3>04_03_التحليل_الدالي_في_فضاءات_التجلي</h3></div>
+        <p>تعريف فضاءات هيلبرت المجلّاة (Hilbert manifolds) مع معامل التجلي. معادلة شرودنغر المعدلة: \(i\hbar \partial_\tau \Psi = \hat{H}_\tau \Psi\).</p>
+        <div id="4_4" class="toc-marker"><h3>04_04_الطوبولوجيا_الجبرية_للبنى_العلائقية</h3></div>
+        <p>ربط ∞ بمفاهيم الحلقات والزمر التماثلية. التشابك الكمومي يمثل علاقة هوموتوبية بين الجسيمات.</p>
+        <div class="page-break"></div>
+
+        <!-- 05_التطبيقات_الفيزيائية_والكونية -->
+        <div id="part2_05" class="toc-marker section-header"><h2>📁 05_التطبيقات_الفيزيائية_والكونية</h2></div>
+        <div id="5_1" class="toc-marker"><h3>05_01_النموذج_الكوني_الحلزوني_المتطور</h3></div>
+        <p>معادلة فريدمان المعدلة: \(\left(\frac{\dot{a}}{a}\right)^2 = \frac{8\pi G}{3}\rho + \beta(\tau)\dot{\tau}^2 + ...\) تشرح التسارع الكوني دون طاقة مظلمة.</p>
+        <div id="5_2" class="toc-marker"><h3>05_02_إعادة_تفسير_ميكانيكا_الكم_في_إطار_𝕊</h3></div>
+        <p>التراكب = 0ₚ، القياس = \(\eta\)، التشابك = ∞. قاعدة بورن المعدلة: \(P = |\psi|^2\cdot BS\).</p>
+        <div id="5_3" class="toc-marker"><h3>05_03_الثوابت_الفيزيائية_كقيم_BS</h3></div>
+        <p>كل ثابت فيزيائي \(C_i = BS_\infty(S_i)\cdot K_i\). جدول يربط \(c, \hbar, G, \alpha, m_e\) بـ BS.</p>
+        <div id="5_4" class="toc-marker"><h3>05_04_نظرية_الأوتار_و_بنية_∞_المتعددة_الأبعاد</h3></div>
+        <p>فضاء كالابي-ياو = \(\infty \otimes 6\). اهتزازات الأوتار = \(BS(n) = \frac{2}{2n-3}\).</p>
+        <div class="page-break"></div>
+
+        <!-- 06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي -->
+        <div id="part2_06" class="toc-marker section-header"><h2>📁 06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي</h2></div>
+        <div id="6_1" class="toc-marker"><h3>06_01_خوارزميات_التجلي_لحل_مشاكل_NP</h3></div>
+        <p>خوارزميات 𝕊 لمشاكل TSP, SAT, Knapsack تحقق تحولًا من أسي إلى حدودي. (انظر الجدول).</p>
+        <div id="6_2" class="toc-marker"><h3>06_02_التعلم_الآلي_البنيوي_باستخدام_BS</h3></div>
+        <p>الشبكات العصبية الثالوثية: طبقات ❶ (اتساق)، 0ₚ (إمكان)، ∞ (علاقات). دالة الخسارة الثالوثية \(\mathcal{L} = \alpha\mathcal{L}_1\oplus\beta\mathcal{L}_2\oplus\gamma\mathcal{L}_3\).</p>
+        <div id="6_3" class="toc-marker"><h3>06_03_معالجة_اللغة_الطبيعية_بمنظور_علائقي</h3></div>
+        <p>استخدام ∞ لبناء فضاءات دلالية. دقة تصل 94% في الفهم السياقي.</p>
+        <div id="6_4" class="toc-marker"><h3>06_04_محاكاة_الأنظمة_المعقدة_في_𝕊</h3></div>
+        <p>نمذجة الأنظمة البيئية والاجتماعية باستخدام BS ومعامل التجلي.</p>
+        <div class="page-break"></div>
+
+        <!-- 07_التطبيقات_المعرفية_والفلسفية -->
+        <div id="part2_07" class="toc-marker section-header"><h2>📁 07_التطبيقات_المعرفية_والفلسفية</h2></div>
+        <div id="7_1" class="toc-marker"><h3>07_01_نظرية_المعرفة_البنيوية_في_𝕊</h3></div>
+        <p>المعرفة = تجلٍّ للمطلق عبر الإمكان والعلاقة. الحقيقة = درجة استقرار بنيوي.</p>
+        <div id="7_2" class="toc-marker"><h3>07_02_فلسفة_الرياضيات_التجريبية</h3></div>
+        <p>الرياضيات ليست مجرد بنى صورية، بل تجليات قابلة للاختبار التجريبي (مثل \(\mathcal{CB}\)).</p>
+        <div id="7_3" class="toc-marker"><h3>07_03_النظام_𝕊_وأسس_المنطق_الجديد</h3></div>
+        <p>منطق ثلاثي القيم (مطلق، إمكان، علاقة) يتجاوز ثنائية الصدق/الكذب.</p>
+        <div id="7_4" class="toc-marker"><h3>07_04_التجربة_الصوفية_والتجلي_الرياضي</h3></div>
+        <p>مقاربة بين مفهوم الفناء (المطلق) والتجلي في التصوف الإسلامي والنظام 𝕊.</p>
+        <div class="page-break"></div>
+
+        <!-- 08_الدراسات_التجريبية_والتطبيقية -->
+        <div id="part2_08" class="toc-marker section-header"><h2>📁 08_الدراسات_التجريبية_والتطبيقية</h2></div>
+        <div id="8_1" class="toc-marker"><h3>08_01_دراسات_حالة_في_الاقتصاد_السلوكي</h3></div>
+        <p>تطبيق BS على نماذج القيمة: \(V = BS(\text{جودة}) \otimes \eta(\text{ندرة}) \oplus \delta(\text{طلب})\).</p>
+        <div id="8_2" class="toc-marker"><h3>08_02_تطبيقات_في_علم_الأعصاب_والإدراك</h3></div>
+        <p>قياس الوعي عبر معادلة \(\Psi_{\text{Consciousness}}\) باستخدام fMRI و EEG.</p>
+        <div id="8_3" class="toc-marker"><h3>08_03_النظام_𝕊_في_تحليل_الشبكات_الاجتماعية</h3></div>
+        <p>نمذجة التفاعلات الاجتماعية كعلاقات ∞ مع BS يقيس تماسك المجموعة.</p>
+        <div id="8_4" class="toc-marker"><h3>08_04_نمذجة_الأنظمة_البيئية_المعقدة</h3></div>
+        <p>تطبيق BS على ديناميكيات السكان والتنوع الحيوي.</p>
+        <div class="page-break"></div>
+
+        <!-- =============== الجزء الثالث: المناقشة والمستقبل =============== -->
+        <div class="section-header"><h1>📁 الجزء الثالث: المناقشة والمستقبل</h1></div>
+
+        <!-- 09_الدراسات_المقارنة_والنقدية -->
+        <div id="part3_09" class="toc-marker section-header"><h2>📁 09_الدراسات_المقارنة_والنقدية</h2></div>
+        <div id="9_1" class="toc-marker"><h3>09_01_مقارنة_مع_نظرية_المجموعات_ZFC</h3></div>
+        <p>نظام 𝕊 يتجاوز مفارقة راسل عبر رفض الـمجموعة الكلية ويقدم أسسًا وجودية بدلاً من صورية.</p>
+        <div id="9_2" class="toc-marker"><h3>09_02_العلاقة_مع_نظرية_الفئات</h3></div>
+        <p>يمكن صياغة ∞ كفئة من العلاقات، مع ❶ ككائن نهائي و 0ₚ ككائن بدئي.</p>
+        <div id="9_3" class="toc-marker"><h3>09_03_النقد_البنائي_للنظام_𝕊</h3></div>
+        <p>مناقشة الانتقادات المحتملة: التعسف في اختيار الأعداد (23)، صعوبة القياس، وطرح حلول مقترحة.</p>
+        <div id="9_4" class="toc-marker"><h3>09_04_الحوار_مع_الرياضيات_التقليدية</h3></div>
+        <p>حوار مع فلاسفة الرياضيات (فيثاغورس، ديكارت، هيجل، غودل) وكيف يجيب 𝕊 على إشكالياتهم.</p>
+        <div class="page-break"></div>
+
+        <!-- 10_الأدوات_والبنية_التحتية -->
+        <div id="part3_10" class="toc-marker section-header"><h2>📁 10_الأدوات_والبنية_التحتية</h2></div>
+        <div id="10_1" class="toc-marker"><h3>10_01_مكتبة_SMath_للبيثون</h3></div>
+        <p>مكتبة مفتوحة المصدر تحوي دوال لحساب BS، عمليات ⊕ و ⊗، ومحاكاة الأنظمة.</p>
+        <div id="10_2" class="toc-marker"><h3>10_02_حزمة_SSystem_لـ_R</h3></div>
+        <p>حزمة لتحليل البيانات باستخدام BS، خاصة في العلوم الاجتماعية والبيئية.</p>
+        <div id="10_3" class="toc-marker"><h3>10_03_واجهة_بصرية_للمحاكاة_التفاعلية</h3></div>
+        <p>تطبيق ويب لمحاكاة الأنظمة الثالوثية وعرض BS بشكل تفاعلي.</p>
+        <div id="10_4" class="toc-marker"><h3>10_04_قاعدة_بيانات_المسائل_والتجليات</h3></div>
+        <p>قاعدة بيانات تحتوي على أمثلة وتطبيقات محلولة في 𝕊.</p>
+        <div class="page-break"></div>
+
+        <!-- 11_الرؤى_المستقبلية -->
+        <div id="part3_11" class="toc-marker section-header"><h2>📁 11_الرؤى_المستقبلية</h2></div>
+        <div id="11_1" class="toc-marker"><h3>11_01_خارطة_البحث_العلمي_لـ_𝕊</h3></div>
+        <p>مخطط زمني لتطوير النظام (2026-2040) يشمل تجارب CMB، كازيمير، التعاون مع LIGO.</p>
+        <div id="11_2" class="toc-marker"><h3>11_02_التعليم_والتدريس_بمنهج_𝕊</h3></div>
+        <p>تصور لمناهج دراسية في الرياضيات والفلسفة تعتمد على النظام الثالوثي.</p>
+        <div id="11_3" class="toc-marker"><h3>11_03_الذكاء_الاصطناعي_العام_و_𝕊</h3></div>
+        <p>إمكانية بناء AGI يعتمد على الوعي الثالوثي ومعاملات BS.</p>
+        <div id="11_4" class="toc-marker"><h3>11_04_رؤية_لمستقبل_الرياضيات_الموحدة</h3></div>
+        <p>نحو رياضيات جديدة توحد الفروع التقليدية تحت مظلة الثالوث.</p>
+        <div class="page-break"></div>
+
+        <!-- =============== الملاحق =============== -->
+        <div id="appendices" class="section-header"><h1>📁 الملاحق</h1></div>
+        <div id="app_a" class="toc-marker"><h2>الملحق_أ_المصطلحات</h2></div>
+        <p>قاموس للمصطلحات الخاصة: التجلي، الاستقرار البنيوي، الإمكان المحض، إلخ.</p>
+        <div id="app_b" class="toc-marker"><h2>الملحق_ب_المراجع</h2></div>
+        <p>قائمة بالمراجع الأساسية (أرسطو، ابن سينا، غودل، بينروز).</p>
+        <div id="app_c" class="toc-marker"><h2>الملحق_ج_الشهادات</h2></div>
+        <p>شهادات وتقييمات من باحثين في المجال.</p>
+        <div class="page-break"></div>
+
+        <!-- =============== ملفات_الدعم =============== -->
+        <div id="support" class="section-header"><h1>📁 ملفات_الدعم</h1></div>
+        <div id="readme" class="toc-marker"><h2>README_الكتاب.md</h2></div>
+        <p>يحتوي هذا الملف على تعليمات تشغيل الموقع ونشره على GitHub Pages. ببساطة، احفظ الصفحة كـ index.html في مستودع، وافعّل GitHub Pages من الإعدادات.</p>
+        <div id="quick" class="toc-marker"><h2>دليل_الاستخدام_السريع</h2></div>
+        <p>استخدم القائمة الجانبية للتنقل بين الأقسام. يمكنك طباعة المستند بأكمله أو حفظه كـ PDF عبر زر الطباعة في الأسفل.</p>
+        <div id="compat" class="toc-marker"><h2>جدول_التوافق_الرياضي</h2></div>
+        <p>يوضح الجدول المقارن بين المفاهيم في الرياضيات التقليدية ونظام 𝕊.</p>
+        <div id="symbols" class="toc-marker"><h2>فهرس_الرموز_والمصطلحات_المتقدمة</h2></div>
+        <p>قائمة شاملة بكل الرموز المستخدمة في الأطروحة مع تعريفاتها.</p>
+        <div class="page-break"></div>
+
+        <!-- تذييل النهاية (مثل السابق) -->
+        <div class="footer">
+            <p style="font-size: 20pt; font-weight: bold;">✍️ المؤلف: أحمد علي بوكر نسيب</p>
+            <p>📧 Eng.ahmad.2011bokar@gmail.com</p>
+            <p>🔗 https://github.com/bouker/thesis-S</p>
+            <p>🔬 التنبؤات القابلة للاختبار: CMB (~0.1 Hz) | كازيمير | نيوترينوات | مادة مظلمة</p>
+            <p style="margin-top: 1rem;">جميع الحقوق محفوظة © 2026 - النسخة المحسّنة</p>
+        </div>
+
+        <!-- نهاية المحتوى الرئيسي -->
     </div>
 
     <script>
-        // هيكل الكتاب (يمكن تعديله حسب ملفاتك الفعلية)
-        const bookStructure = [
-            {
-                title: "مقدمة الكتاب",
-                icon: "fa-book-open",
-                files: [
-                    { name: " 00_مقدمة_الكتاب_والدليل.md", url: "files/00_مقدمة_الكتاب_والدليل.md" },
-                    { name: " 00_ملخص_تنفيذي.md", url: "a762aba7d062c3ca308fc2dc2effc5d3d7d9ac6c" }
-                ]
-            },
-            {
-                title: "الجزء الأول: الأساسيات النظرية",
-                icon: "fa-flask",
-                subsections: [
-                    {
-                        title: "01_المدخل_والخلفية",
-                        icon: "fa-folder-open",
-                        files: [
-                            { name: "01_01_مقدمة_الثالوث_الرياضي.md", url: "files/الجزء_الأول_الأساسيات_النظرية/01_المدخل_والخلفية/01_01_مقدمة_الثالوث_الرياضي.md" },
-                            { name: "01_02_الإطار_النظري_والتأصيل.md", url: "files/الجزء_الأول_الأساسيات_النظرية/01_المدخل_والخلفية/01_02_الإطار_النظري_والتأصيل.md" },
-                            { name: "01_03_الخلفية_البحثية.md", url: "files/الجزء_الأول_الأساسيات_النظرية/01_المدخل_والخلفية/01_03_الخلفية_البحثية.md" }
-                        ]
-                    },
-                    {
-                        title: "02_النواة_التفسيرية",
-                        icon: "fa-atom",
-                        files: [
-                            { name: "02_01_التفسير_البنيوي_للثالوث.md", url: "files/الجزء_الأول_الأساسيات_النظرية/02_النواة_التفسيرية/02_01_التفسير_البنيوي_للثالوث.md" },
-                            { name: "02_02_آلية_التجلي_والتحول.md", url: "files/الجزء_الأول_الأساسيات_النظرية/02_النواة_التفسيرية/02_02_آلية_التجلي_والتحول.md" },
-                            { name: "02_03_العلاقات_الداخلية_في_النظام_الثلاثي.md", url: "files/الجزء_الأول_الأساسيات_النظرية/02_النواة_التفسيرية/02_03_العلاقات_الداخلية_في_النظام_الثلاثي.md" }
-                        ]
-                    },
-                    {
-                        title: "03_الدليل_المرئي_والرموز",
-                        icon: "fa-icons",
-                        files: [
-                            { name: "03_01_معجم_رموز_الثالوث.md", url: "files/الجزء_الأول_الأساسيات_النظرية/03_الدليل_المرئي_والرموز/03_01_معجم_رموز_الثالوث.md" },
-                            { name: "03_02_فهرس_الرسومات_والمخططات.md", url: "files/الجزء_الأول_الأساسيات_النظرية/03_الدليل_المرئي_والرموز/03_02_فهرس_الرسومات_والمخططات.md" }
-                        ]
-                    }
-                ]
-            },
-            {
-                title: "الجزء الثاني: التطبيقات المتعددة",
-                icon: "fa-cogs",
-                subsections: [
-                    {
-                        title: "04_التطبيقات_الرياضية_المتقدمة",
-                        icon: "fa-square-root-variable",
-                        files: [
-                            { name: "04_01_نظرية_الأعداد_في_𝕊.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/04_التطبيقات_الرياضية_المتقدمة/04_01_نظرية_الأعداد_في_𝕊.md" },
-                            { name: "04_02_الهندسة_اللاإقليدية_و_𝕊.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/04_التطبيقات_الرياضية_المتقدمة/04_02_الهندسة_اللاإقليدية_و_𝕊.md" },
-                            { name: "04_03_التحليل_الدالي_في_فضاءات_التجلي.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/04_التطبيقات_الرياضية_المتقدمة/04_03_التحليل_الدالي_في_فضاءات_التجلي.md" },
-                            { name: "04_04_الطوبولوجيا_الجبرية_للبنى_العلائقية.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/04_التطبيقات_الرياضية_المتقدمة/04_04_الطوبولوجيا_الجبرية_للبنى_العلائقية.md" }
-                        ]
-                    },
-                    {
-                        title: "05_التطبيقات_الفيزيائية_والكونية",
-                        icon: "fa-globe",
-                        files: [
-                            { name: "05_01_النموذج_الكوني_الحلزوني_المتطور.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/05_التطبيقات_الفيزيائية_والكونية/05_01_النموذج_الكوني_الحلزوني_المتطور.md" },
-                            { name: "05_02_إعادة_تفسير_ميكانيكا_الكم_في_إطار_𝕊.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/05_التطبيقات_الفيزيائية_والكونية/05_02_إعادة_تفسير_ميكانيكا_الكم_في_إطار_𝕊.md" },
-                            { name: "05_03_الثوابت_الفيزيائية_كقيم_BS.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/05_التطبيقات_الفيزيائية_والكونية/05_03_الثوابت_الفيزيائية_كقيم_BS.md" },
-                            { name: "05_04_نظرية_الأوتار_و_بنية_∞_المتعددة_الأبعاد.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/05_التطبيقات_الفيزيائية_والكونية/05_04_نظرية_الأوتار_و_بنية_∞_المتعددة_الأبعاد.md" }
-                        ]
-                    },
-                    {
-                        title: "06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي",
-                        icon: "fa-microchip",
-                        files: [
-                            { name: "06_01_خوارزميات_التجلي_لحل_مشاكل_NP.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي/06_01_خوارزميات_التجلي_لحل_مشاكل_NP.md" },
-                            { name: "06_02_التعلم_الآلي_البنيوي_باستخدام_BS.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي/06_02_التعلم_الآلي_البنيوي_باستخدام_BS.md" },
-                            { name: "06_03_معالجة_اللغة_الطبيعية_بمنظور_علائقي.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي/06_03_معالجة_اللغة_الطبيعية_بمنظور_علائقي.md" },
-                            { name: "06_04_محاكاة_الأنظمة_المعقدة_في_𝕊.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/06_التطبيقات_الحاسوبية_والذكاء_الاصطناعي/06_04_محاكاة_الأنظمة_المعقدة_في_𝕊.md" }
-                        ]
-                    },
-                    {
-                        title: "07_التطبيقات_المعرفية_والفلسفية",
-                        icon: "fa-brain",
-                        files: [
-                            { name: "07_01_نظرية_المعرفة_البنيوية_في_𝕊.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/07_التطبيقات_المعرفية_والفلسفية/07_01_نظرية_المعرفة_البنيوية_في_𝕊.md" },
-                            { name: "07_02_فلسفة_الرياضيات_التجريبية.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/07_التطبيقات_المعرفية_والفلسفية/07_02_فلسفة_الرياضيات_التجريبية.md" },
-                            { name: "07_03_النظام_𝕊_وأسس_المنطق_الجديد.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/07_التطبيقات_المعرفية_والفلسفية/07_03_النظام_𝕊_وأسس_المنطق_الجديد.md" },
-                            { name: "07_04_التجربة_الصوفية_والتجلي_الرياضي.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/07_التطبيقات_المعرفية_والفلسفية/07_04_التجربة_الصوفية_والتجلي_الرياضي.md" }
-                        ]
-                    },
-                    {
-                        title: "08_الدراسات_التجريبية_والتطبيقية",
-                        icon: "fa-flask",
-                        files: [
-                            { name: "08_01_دراسات_حالة_في_الاقتصاد_السلوكي.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/08_الدراسات_التجريبية_والتطبيقية/08_01_دراسات_حالة_في_الاقتصاد_السلوكي.md" },
-                            { name: "08_02_تطبيقات_في_علم_الأعصاب_والإدراك.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/08_الدراسات_التجريبية_والتطبيقية/08_02_تطبيقات_في_علم_الأعصاب_والإدراك.md" },
-                            { name: "08_03_النظام_𝕊_في_تحليل_الشبكات_الاجتماعية.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/08_الدراسات_التجريبية_والتطبيقية/08_03_النظام_𝕊_في_تحليل_الشبكات_الاجتماعية.md" },
-                            { name: "08_04_نمذجة_الأنظمة_البيئية_المعقدة.md", url: "files/الجزء_الثاني_التطبيقات_المتعددة/08_الدراسات_التجريبية_والتطبيقية/08_04_نمذجة_الأنظمة_البيئية_المعقدة.md" }
-                        ]
-                    }
-                ]
-            },
-            {
-                title: "الجزء الثالث: المناقشة والمستقبل",
-                icon: "fa-chart-line",
-                subsections: [
-                    {
-                        title: "09_الدراسات_المقارنة_والنقدية",
-                        icon: "fa-scale-balanced",
-                        files: [
-                            { name: "09_01_مقارنة_مع_نظرية_المجموعات_ZFC.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/09_الدراسات_المقارنة_والنقدية/09_01_مقارنة_مع_نظرية_المجموعات_ZFC.md" },
-                            { name: "09_02_العلاقة_مع_نظرية_الفئات.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/09_الدراسات_المقارنة_والنقدية/09_02_العلاقة_مع_نظرية_الفئات.md" },
-                            { name: "09_03_النقد_البنائي_للنظام_𝕊.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/09_الدراسات_المقارنة_والنقدية/09_03_النقد_البنائي_للنظام_𝕊.md" },
-                            { name: "09_04_الحوار_مع_الرياضيات_التقليدية.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/09_الدراسات_المقارنة_والنقدية/09_04_الحوار_مع_الرياضيات_التقليدية.md" }
-                        ]
-                    },
-                    {
-                        title: "10_الأدوات_والبنية_التحتية",
-                        icon: "fa-toolbox",
-                        files: [
-                            { name: "10_01_مكتبة_SMath_للبيثون.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/10_الأدوات_والبنية_التحتية/10_01_مكتبة_SMath_للبيثون.md" },
-                            { name: "10_02_حزمة_SSystem_لـ_R.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/10_الأدوات_والبنية_التحتية/10_02_حزمة_SSystem_لـ_R.md" },
-                            { name: "10_03_واجهة_بصرية_للمحاكاة_التفاعلية.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/10_الأدوات_والبنية_التحتية/10_03_واجهة_بصرية_للمحاكاة_التفاعلية.md" },
-                            { name: "10_04_قاعدة_بيانات_المسائل_والتجليات.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/10_الأدوات_والبنية_التحتية/10_04_قاعدة_بيانات_المسائل_والتجليات.md" }
-                        ]
-                    },
-                    {
-                        title: "11_الرؤى_المستقبلية",
-                        icon: "fa-rocket",
-                        files: [
-                            { name: "11_01_خارطة_البحث_العلمي_لـ_𝕊.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/11_الرؤى_المستقبلية/11_01_خارطة_البحث_العلمي_لـ_𝕊.md" },
-                            { name: "11_02_التعليم_والتدريس_بمنهج_𝕊.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/11_الرؤى_المستقبلية/11_02_التعليم_والتدريس_بمنهج_𝕊.md" },
-                            { name: "11_03_الذكاء_الاصطناعي_العام_و_𝕊.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/11_الرؤى_المستقبلية/11_03_الذكاء_الاصطناعي_العام_و_𝕊.md" },
-                            { name: "11_04_رؤية_لمستقبل_الرياضيات_الموحدة.md", url: "files/الجزء_الثالث_المناقشة_والمستقبل/11_الرؤى_المستقبلية/11_04_رؤية_لمستقبل_الرياضيات_الموحدة.md" }
-                        ]
-                    }
-                ]
-            },
-            {
-                title: "الملاحق",
-                icon: "fa-paperclip",
-                files: [
-                    { name: "الملحق_أ_المصطلحات.md", url: "files/الملاحق/الملحق_أ_المصطلحات.md" },
-                    { name: "الملحق_ب_المراجع.md", url: "files/الملاحق/الملحق_ب_المراجع.md" },
-                    { name: "الملحق_ج_الشهادات.md", url: "files/الملاحق/الملحق_ج_الشهادات.md" }
-                ]
-            },
-            {
-                title: "ملفات الدعم",
-                icon: "fa-file-alt",
-                files: [
-                    { name: "README_الكتاب.md", url: "files/ملفات_الدعم/README_الكتاب.md" },
-                    { name: "دليل_الاستخدام_السريع.md", url: "files/ملفات_الدعم/دليل_الاستخدام_السريع.md" },
-                    { name: "جدول_التوافق_الرياضي.md", url: "files/ملفات_الدعم/جدول_التوافق_الرياضي.md" },
-                    { name: "فهرس_الرموز_والمصطلحات_المتقدمة.md", url: "files/ملفات_الدعم/فهرس_الرموز_والمصطلحات_المتقدمة.md" }
-                ]
-            }
-        ];
-
-        // بناء شريط التنقل
-        function renderNav() {
-            const nav = document.getElementById('nav');
-            nav.innerHTML = '';
-            bookStructure.forEach(section => {
-                const sectionDiv = document.createElement('div');
-                sectionDiv.className = 'section';
-
-                const sectionTitle = document.createElement('div');
-                sectionTitle.className = 'section-title';
-                sectionTitle.innerHTML = `<i class="fas ${section.icon || 'fa-folder'}"></i><span>${section.title}</span>`;
-                sectionDiv.appendChild(sectionTitle);
-
-                if (section.files) {
-                    const ul = document.createElement('ul');
-                    ul.className = 'file-list';
-                    section.files.forEach(file => {
-                        const li = document.createElement('li');
-                        const link = document.createElement('a');
-                        link.href = '#';
-                        link.className = 'file-link';
-                        link.innerHTML = `<i class="fas fa-file"></i><span>${file.name}</span>`;
-                        link.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            loadFile(file.url);
-                            // إزالة active من جميع الروابط
-                            document.querySelectorAll('.file-link').forEach(l => l.classList.remove('active'));
-                            link.classList.add('active');
-                        });
-                        li.appendChild(link);
-                        ul.appendChild(li);
-                    });
-                    sectionDiv.appendChild(ul);
-                }
-
-                if (section.subsections) {
-                    section.subsections.forEach(sub => {
-                        const subDiv = document.createElement('div');
-                        subDiv.className = 'subsection';
-
-                        const subTitle = document.createElement('div');
-                        subTitle.className = 'subsection-title';
-                        subTitle.innerHTML = `<i class="fas ${sub.icon || 'fa-folder-open'}"></i><span>${sub.title}</span>`;
-                        subDiv.appendChild(subTitle);
-
-                        const ul = document.createElement('ul');
-                        ul.className = 'file-list';
-                        sub.files.forEach(file => {
-                            const li = document.createElement('li');
-                            const link = document.createElement('a');
-                            link.href = '#';
-                            link.className = 'file-link';
-                            link.innerHTML = `<i class="fas fa-file"></i><span>${file.name}</span>`;
-                            link.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                loadFile(file.url);
-                                document.querySelectorAll('.file-link').forEach(l => l.classList.remove('active'));
-                                link.classList.add('active');
-                            });
-                            li.appendChild(link);
-                            ul.appendChild(li);
-                        });
-                        subDiv.appendChild(ul);
-                        sectionDiv.appendChild(subDiv);
-                    });
-                }
-
-                nav.appendChild(sectionDiv);
-            });
-        }
-
-        // تحميل وعرض ملف Markdown
-        async function loadFile(url) {
-            const contentDiv = document.getElementById('markdown-content');
-            contentDiv.innerHTML = '<div class="loader"><i class="fas fa-spinner fa-spin"></i> جاري تحميل الملف...</div>';
-
-            try {
-                const response = await fetch(url);
-                if (!response.ok) throw new Error('الملف غير موجود');
-                const markdown = await response.text();
-                // تحويل Markdown إلى HTML باستخدام marked
-                const html = marked.parse(markdown);
-                contentDiv.innerHTML = html;
-                // تطبيق Highlight.js على كتل الكود
-                contentDiv.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
-                });
-                // إعادة تنشيط Mermaid
-                if (typeof mermaid !== 'undefined') {
-                    mermaid.run({ nodes: contentDiv.querySelectorAll('.mermaid') });
-                }
-                // إعادة تنضيد MathJax
-                if (typeof MathJax !== 'undefined') {
-                    MathJax.typesetPromise([contentDiv]).catch(err => console.log(err));
-                }
-            } catch (error) {
-                contentDiv.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-triangle"></i> خطأ في تحميل الملف: ${error.message}</div>`;
-            }
-        }
-
-        // طي/توسيع الشريط الجانبي
-        document.getElementById('toggleSidebar').addEventListener('click', function() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('collapsed');
-            const icon = this.querySelector('i');
-            if (sidebar.classList.contains('collapsed')) {
-                icon.classList.remove('fa-chevron-right');
-                icon.classList.add('fa-chevron-left');
-            } else {
-                icon.classList.remove('fa-chevron-left');
-                icon.classList.add('fa-chevron-right');
-            }
-        });
-
-        // بدء التطبيق
-        renderNav();
-
-        // (اختياري) تحميل ملف افتراضي عند البداية
-        // loadFile('files/00_مقدمة_الكتاب_والدليل.md');
+        mermaid.initialize({ startOnLoad: true, theme: 'default', direction: 'ltr', fontFamily: 'Cairo, sans-serif' });
     </script>
 </body>
 </html>
